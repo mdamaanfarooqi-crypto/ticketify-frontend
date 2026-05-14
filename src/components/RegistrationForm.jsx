@@ -23,13 +23,13 @@ function RegistrationForm({ onClose }) {
     try {
       const formData = { name, surname, email, password };
       const result = await Register(BASE_URL, formData);
-      if (result) {
+      if (result.success) {
         setSuccess(true);
         setTimeout(() => {
           onClose();
         }, 1500);
       } else {
-        setError('Registration failed. Please try again.');
+        setError(result.error || 'Registration failed. Please try again.');
       }
     } catch (err) {
       setError('An error occurred during registration.');

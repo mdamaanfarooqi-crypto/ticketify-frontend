@@ -9,15 +9,19 @@ async function Register(BASE_URL, formData) {
     });
 
     if (response.ok) {
-      console.log('Registration successful');
-      return true;
+      return { success: true };
     } else {
-      console.error('Registration failed');
-      return false;
+      let errorMessage = 'Registration failed';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || `Server error (${response.status})`;
+      } catch {
+        errorMessage = `Server error (${response.status})`;
+      }
+      return { success: false, error: errorMessage };
     }
   } catch (error) {
-    console.error('Error occurred while registering:', error);
-    return false;
+    return { success: false, error: 'Cannot connect to server. Is the backend running?' };
   }
 }
 
